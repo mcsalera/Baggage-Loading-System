@@ -16,6 +16,6 @@ import org.springframework.data.jpa.repository.EntityGraph;
  *
  * @author Bert
  */
-public interface LoadingBayRepository extends JpaRepository<LoadingBay, Long> {
+public interface LoadingBayRepository extends JpaRepository<LoadingBay, Integer> {
 
 }

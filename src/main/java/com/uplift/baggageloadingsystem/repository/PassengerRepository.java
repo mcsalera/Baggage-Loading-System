@@ -16,6 +16,6 @@ import java.util.List;
  *
  * @author Bert
  */
-public interface PassengerRepository extends JpaRepository<Passenger, Long> {
+public interface PassengerRepository extends JpaRepository<Passenger, Integer> {
 
 }

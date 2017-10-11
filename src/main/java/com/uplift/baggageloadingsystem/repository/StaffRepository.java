@@ -13,6 +13,6 @@ import org.springframework.data.jpa.repository.EntityGraph;
  *
  * @author Bert
  */
-public interface StaffRepository extends JpaRepository<Staff, Long> {
+public interface StaffRepository extends JpaRepository<Staff, Integer> {
 
 }
