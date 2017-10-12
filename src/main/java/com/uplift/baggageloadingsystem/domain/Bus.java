@@ -1,5 +1,8 @@
 package com.uplift.baggageloadingsystem.domain;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -65,7 +68,7 @@ public class Bus {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Bus other = (Baggage) obj;
+        final Bus other = (Bus) obj;
         return new EqualsBuilder().
                 append(this.id, other.id).
                 isEquals();

@@ -1,5 +1,8 @@
 package com.uplift.baggageloadingsystem.domain;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 

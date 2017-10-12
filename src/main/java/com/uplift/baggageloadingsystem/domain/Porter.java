@@ -1,5 +1,8 @@
 package com.uplift.baggageloadingsystem.domain;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import javax.persistence.*;
 import java.util.Collection;
 
