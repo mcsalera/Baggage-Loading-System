@@ -1,7 +1,7 @@
 package com.uplift.baggageloadingsystem.domain;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -19,7 +19,7 @@ public class Porter {
             joinColumns=@JoinColumn(name="porter_id"),
             inverseJoinColumns=@JoinColumn(name="loading_bay_id"))
     private Collection<LoadingBay> loadingBays;
-    @OneToMany(mappedBy = "porterLog", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "porter", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Collection<PorterLog> porterLogs;
 
     public Integer getId() { return id; }

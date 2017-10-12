@@ -4,7 +4,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -16,7 +15,7 @@ public class Staff {
     private String lastName;
     private String username;
     private String password;
-    @OneToOne(mappedBy = "baggageCounter", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(mappedBy = "staff", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private BaggageCounter baggageCounters;
 
     public Integer getId() { return id; }

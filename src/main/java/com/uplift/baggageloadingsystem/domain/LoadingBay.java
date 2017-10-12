@@ -14,9 +14,9 @@ public class LoadingBay {
     private Integer id;
     private String via;
     private String destination;
-    @OneToMany(mappedBy = "bus", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "loadingBay", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Collection<Bus> buses;
-    @OneToMany(mappedBy = "counterStorage", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "loadingBay", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Collection<CounterStorage> counterStorages;
 
     public Integer getId() { return id; }

@@ -13,10 +13,9 @@ public class BaggageCounter {
     @Id @GeneratedValue(strategy=IDENTITY)
     private Integer id;
     private Integer number;
-    private Integer staffId;
-    @OneToMany(mappedBy = "baggage")
+    @OneToMany(mappedBy = "baggageCounter")
     private Collection<Baggage> baggages;
-    @OneToOne(mappedBy = "baggageCounter")
+    @OneToOne @JoinColumn(name="staff_id")
     private Staff staff;
 
     public Integer getId() { return id; }
@@ -26,10 +25,6 @@ public class BaggageCounter {
     public Integer getNumber() { return number; }
 
     public void setNumber(Integer number) { this.number = number; }
-
-    public Integer getStaffId() { return staffId; }
-
-    public void setStaffId(Integer staffId) { this.staffId = staffId; }
 
     public Collection<Baggage> getBaggages() { return baggages; }
 

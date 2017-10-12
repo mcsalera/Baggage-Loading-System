@@ -1,7 +1,7 @@
 package com.uplift.baggageloadingsystem.domain;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -12,12 +12,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Bus {
     @Id @GeneratedValue(strategy=IDENTITY)
     private Integer id;
-    private String plateNumber;
     private String busCompany;
-    private Integer loadingBayId;
-    @ManyToOne @JoinColumn(name = "bus_id")
+    @ManyToOne @JoinColumn(name = "loading_bay_id")
     private LoadingBay loadingBay;
-    @OneToMany(mappedBy = "passenger", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @OneToMany(mappedBy = "bus", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private Collection<Passenger> passengers;
 
     public Integer getId() {
@@ -28,21 +26,9 @@ public class Bus {
         this.id = id;
     }
 
-    public String getPlateNumber() {
-        return plateNumber;
-    }
-
-    public void setPlateNumber(String plateNumber) {
-        this.plateNumber = plateNumber;
-    }
-
     public String getBusCompany() { return busCompany; }
 
     public void setBusCompany(String busCompany) { this.busCompany = busCompany; }
-
-    public Integer getLoadingBayId() { return loadingBayId; }
-
-    public void setLoadingBayId(Integer loadingBayId) { this.loadingBayId = loadingBayId; }
 
     public LoadingBay getLoadingBay() { return loadingBay; }
 

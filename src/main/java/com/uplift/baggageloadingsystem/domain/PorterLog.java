@@ -6,10 +6,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Entity
 public class PorterLog {
+    @Id @GeneratedValue(strategy=IDENTITY)
     private Integer id;
-    private Integer porterId;
     private Timestamp loginTime;
     private Timestamp logoutTime;
     @ManyToOne @JoinColumn(name = "porter_id")
@@ -18,10 +20,6 @@ public class PorterLog {
     public Integer getId() { return id; }
 
     public void setId(Integer id) { this.id = id; }
-
-    public Integer getPorterId() { return porterId; }
-
-    public void setPorterId(Integer porterId) { this.porterId = porterId; }
 
     public Timestamp getLoginTime() { return loginTime; }
 
