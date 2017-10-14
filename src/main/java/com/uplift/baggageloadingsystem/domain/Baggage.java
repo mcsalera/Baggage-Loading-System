@@ -1,11 +1,11 @@
 package com.uplift.baggageloadingsystem.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -13,11 +13,12 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Baggage {
     @Id @GeneratedValue(strategy=IDENTITY)
     private Integer id;
-    private String status;
+    private String status = "NOT LOADED";
+    private String qrCodeUrl;
+    private String code;
+    @JsonIgnore
     @ManyToOne @JoinColumn(name = "passenger_id")
     private Passenger passenger;
-    @ManyToOne @JoinColumn(name = "baggage_counter_id")
-    private BaggageCounter baggageCounter;
 
     public Integer getId() { return id; }
 
@@ -31,9 +32,25 @@ public class Baggage {
 
     public void setPassenger(Passenger passenger) { this.passenger = passenger; }
 
-    public BaggageCounter getBaggageCounter() { return baggageCounter; }
+    public String getQrCodeUrl() {
+        return qrCodeUrl;
+    }
 
-    public void setBaggageCounter(BaggageCounter baggageCounter) { this.baggageCounter = baggageCounter; }
+    public void setQrCodeUrl(String qrCodeUrl) {
+        this.qrCodeUrl = qrCodeUrl;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Integer getPassengerId() {
+        return this.passenger.getId();
+    }
 
     @Override
     public int hashCode() {

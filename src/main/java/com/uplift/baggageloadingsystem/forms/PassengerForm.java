@@ -2,22 +2,20 @@ package com.uplift.baggageloadingsystem.forms;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class PassengerForm {
-
     private Integer id;
-    @JsonProperty("first_name")
     private String firstName;
-    @JsonProperty("last_name")
     private String lastName;
-    @JsonProperty("bus_id")
-    private Integer busId;
-    @JsonProperty("baggage_weight")
     private Double baggageWeight;
+    private Integer loadingBayId;
+    private Integer baggageCount;
+    private String contactNumber;
     private BigDecimal fee;
     private String code;
-    private String qrCodeUrl;
+    private String passengerQrCodeUrl;
 
     public Integer getId() {
         return id;
@@ -41,14 +39,6 @@ public class PassengerForm {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Integer getBusId() {
-        return busId;
-    }
-
-    public void setBusId(Integer busId) {
-        this.busId = busId;
     }
 
     public Double getBaggageWeight() {
@@ -75,11 +65,35 @@ public class PassengerForm {
         this.code = code;
     }
 
-    public String getQrCodeUrl() {
-        return qrCodeUrl;
+    public String getPassengerQrCodeUrl() {
+        return passengerQrCodeUrl;
     }
 
-    public void setQrCodeUrl(String qrCodeUrl) {
-        this.qrCodeUrl = qrCodeUrl;
+    public void setPassengerQrCodeUrl(String passengerQrCodeUrl) {
+        this.passengerQrCodeUrl = passengerQrCodeUrl;
+    }
+
+    public Integer getBaggageCount() {
+        return baggageCount;
+    }
+
+    public void setBaggageCount(Integer baggageCount) {
+        this.baggageCount = baggageCount;
+    }
+
+    public Integer getLoadingBayId() {
+        return loadingBayId;
+    }
+
+    public void setLoadingBayId(Integer loadingBayId) {
+        this.loadingBayId = loadingBayId;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
     }
 }

@@ -6,11 +6,13 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.uplift.baggageloadingsystem.domain.Bus;
+import com.uplift.baggageloadingsystem.domain.Baggage;
+import com.uplift.baggageloadingsystem.domain.BaggageCounter;
 import com.uplift.baggageloadingsystem.domain.LoadingBay;
 import com.uplift.baggageloadingsystem.domain.Passenger;
 import com.uplift.baggageloadingsystem.forms.PassengerForm;
-import com.uplift.baggageloadingsystem.repository.BusRepository;
+import com.uplift.baggageloadingsystem.repository.BaggageCounterRepository;
+import com.uplift.baggageloadingsystem.repository.BaggageRepository;
 import com.uplift.baggageloadingsystem.repository.LoadingBayRepository;
 import com.uplift.baggageloadingsystem.repository.PassengerRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,37 +27,71 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class PassengerService {
 
     private PassengerRepository passengerRepository;
-    private BusRepository busRepository;
+    private BaggageRepository baggageRepository;
+    private BaggageCounterRepository baggageCounterRepository;
+    private LoadingBayRepository loadingBayRepository;
 
-    @Value("${qrcode.path}")
-    private String qrcodePath;
+    @Value("${qrcode.baggage}")
+    private String baggageQrCodePath;
+    @Value("${qrcode.passenger}")
+    private String passengerQrCodePath;
 
-    PassengerService(PassengerRepository passengerRepository, BusRepository busRepository) {
+
+    PassengerService(PassengerRepository passengerRepository, BaggageRepository baggageRepository,
+                     BaggageCounterRepository baggageCounterRepository, LoadingBayRepository loadingBayRepository) {
         this.passengerRepository = passengerRepository;
-        this.busRepository = busRepository;
+        this.baggageRepository = baggageRepository;
+        this.baggageCounterRepository = baggageCounterRepository;
+        this.loadingBayRepository = loadingBayRepository;
     }
 
     public PassengerForm createPassenger(PassengerForm form) {
-        Bus bus = busRepository.findOne(form.getBusId());
-        String guid = UUID.randomUUID().toString();
         form.setFee(new BigDecimal(20.0 * form.getBaggageWeight()));
-        form.setCode(guid);
-        form.setQrCodeUrl(generateQrCode(guid));
-        Passenger passenger = new Passenger(form);
-        passenger.setBus(bus);
-        passenger = passengerRepository.save(passenger);
+        HashMap<String, String> passengerQrCode = generateQrCode(this.passengerQrCodePath);
+        form.setPassengerQrCodeUrl(passengerQrCode.get("url"));
+        form.setCode(passengerQrCode.get("code"));
+        LoadingBay loadingBay = this.loadingBayRepository.findOne(form.getLoadingBayId());
+        Passenger passengerForm = new Passenger(form);
+        passengerForm.setLoadingBay(loadingBay);
+        Passenger passenger = passengerRepository.save(passengerForm);
         form.setId(passenger.getId());
+        List<Map<String, String>> qrCodes =  IntStream.range(0, form.getBaggageCount())
+                                                        .mapToObj( e -> generateQrCode(this.baggageQrCodePath))
+                                                        .collect(Collectors.toList());
+        qrCodes.forEach(e -> {
+            Baggage baggage = new Baggage();
+            baggage.setQrCodeUrl(e.get("url"));
+            baggage.setCode(e.get("code"));
+            baggage.setPassenger(passenger);
+            this.baggageRepository.save(baggage);
+        });
+
         return form;
     }
 
-    private String generateQrCode(String code) {
-        File saveDir = new File(qrcodePath);
-        System.out.println(qrcodePath);
+    public Collection<Baggage> getPassengerBaggage(Integer id) {
+        Passenger passenger = this.passengerRepository.findOne(id);
+        return passenger.getBaggages();
+    }
+
+    public Collection<Baggage> getPassengerBaggage(String code) {
+        Passenger passenger = this.passengerRepository.findByCode(code);
+        return passenger.getBaggages();
+    }
+
+    private HashMap<String, String> generateQrCode(String savePath) {
+        String code = UUID.randomUUID().toString();
+        HashMap<String, String> result = new HashMap<>();
+        result.put("code", code);
+        File saveDir = new File(savePath);
         if(!saveDir.exists())
             saveDir.mkdirs();
         String fileType = "png";
@@ -64,7 +100,7 @@ public class PassengerService {
         df.setTimeZone(tz);
         String nowAsISO = df.format(new Date());
         String fileName = nowAsISO + ".png";
-        String filePath = qrcodePath + "/" + fileName;
+        String filePath = savePath + "/" + fileName;
         int size = 250;
         File myFile = new File(filePath);
         try {
@@ -102,7 +138,7 @@ public class PassengerService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return "http://localhost:8084/upload/" + fileName;
+        result.put("url", "http://localhost:8084/upload/" + fileName);
+        return result;
     }
 }

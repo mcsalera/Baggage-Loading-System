@@ -1,5 +1,6 @@
 package com.uplift.baggageloadingsystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -11,8 +12,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class CounterStorage {
     @Id @GeneratedValue(strategy=IDENTITY)
     private Integer id;
-    @ManyToOne @JoinColumn(name = "porter_id")
-    private Porter porter;
+    @JsonIgnore
+    @ManyToOne @JoinColumn(name = "counter_id")
+    private BaggageCounter baggageCounter;
+    @JsonIgnore
     @ManyToOne @JoinColumn(name = "loading_bay_id")
     private LoadingBay loadingBay;
 
@@ -20,13 +23,25 @@ public class CounterStorage {
 
     public void setId(Integer id) { this.id = id; }
 
-    public Porter getPorter() { return porter; }
+    public BaggageCounter getBaggageCounter() {
+        return baggageCounter;
+    }
 
-    public void setPorter(Porter porter) { this.porter = porter; }
+    public void setBaggageCounter(BaggageCounter baggageCounter) {
+        this.baggageCounter = baggageCounter;
+    }
 
     public LoadingBay getLoadingBay() { return loadingBay; }
 
     public void setLoadingBay(LoadingBay loadingBay) { this.loadingBay = loadingBay; }
+
+    public Integer getLoadingBayId() {
+        return this.loadingBay.getId();
+    }
+
+    public Integer getBaggageCounterId() {
+        return this.baggageCounter.getId();
+    }
 
     @Override
     public int hashCode() {

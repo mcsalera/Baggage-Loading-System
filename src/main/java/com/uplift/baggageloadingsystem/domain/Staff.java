@@ -1,5 +1,6 @@
 package com.uplift.baggageloadingsystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -15,8 +16,9 @@ public class Staff {
     private String lastName;
     private String username;
     private String password;
+    @JsonIgnore
     @OneToOne(mappedBy = "staff", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private BaggageCounter baggageCounters;
+    private BaggageCounter baggageCounter;
 
     public Integer getId() { return id; }
 
@@ -38,9 +40,17 @@ public class Staff {
 
     public void setPassword(String password) { this.password = password; }
 
-    public BaggageCounter getBaggageCounters() { return baggageCounters; }
+    public BaggageCounter getBaggageCounter() {
+        return baggageCounter;
+    }
 
-    public void setBaggageCounters(BaggageCounter baggageCounters) { this.baggageCounters = baggageCounters; }
+    public void setBaggageCounter(BaggageCounter baggageCounter) {
+        this.baggageCounter = baggageCounter;
+    }
+
+    public Integer getBaggageCounterId() {
+        return this.baggageCounter.getId();
+    }
 
     @Override
     public int hashCode() {

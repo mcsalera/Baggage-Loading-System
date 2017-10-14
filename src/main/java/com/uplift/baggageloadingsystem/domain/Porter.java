@@ -1,5 +1,6 @@
 package com.uplift.baggageloadingsystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -14,11 +15,14 @@ public class Porter {
     private String firstName;
     private String lastName;
     private String status;
-    @ManyToMany(fetch = FetchType.LAZY)
+
+    @JsonIgnore
+    @ManyToMany
     @JoinTable(name="porter_loading_bay",
             joinColumns=@JoinColumn(name="porter_id"),
             inverseJoinColumns=@JoinColumn(name="loading_bay_id"))
     private Collection<LoadingBay> loadingBays;
+    @JsonIgnore
     @OneToMany(mappedBy = "porter", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Collection<PorterLog> porterLogs;
 

@@ -1,5 +1,6 @@
 package com.uplift.baggageloadingsystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -14,14 +15,27 @@ public class LoadingBay {
     private Integer id;
     private String via;
     private String destination;
-    @OneToMany(mappedBy = "loadingBay", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Collection<Bus> buses;
+    private String busCompany;
+    private String loadingBayName;
+    private String location;
+    @JsonIgnore
     @OneToMany(mappedBy = "loadingBay", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Collection<CounterStorage> counterStorages;
+    @JsonIgnore
+    @OneToMany (mappedBy = "loadingBay", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Collection<Passenger> passengers;
 
     public Integer getId() { return id; }
 
     public void setId(Integer id) { this.id = id; }
+
+    public String getLoadingBayName() {
+        return loadingBayName;
+    }
+
+    public void setLoadingBayName(String loadingBayName) {
+        this.loadingBayName = loadingBayName;
+    }
 
     public String getVia() { return via; }
 
@@ -31,13 +45,35 @@ public class LoadingBay {
 
     public void setDestination(String destination) { this.destination = destination; }
 
-    public Collection<Bus> getBuses() { return buses; }
-
-    public void setBuses(Collection<Bus> buses) { this.buses = buses; }
-
     public Collection<CounterStorage> getCounterStorages() { return counterStorages; }
 
     public void setCounterStorages(Collection<CounterStorage> counterStorages) { this.counterStorages = counterStorages; }
+
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getBusCompany() {
+        return busCompany;
+    }
+
+    public void setBusCompany(String busCompany) {
+        this.busCompany = busCompany;
+    }
+
+
+    public Collection<Passenger> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(Collection<Passenger> passengers) {
+        this.passengers = passengers;
+    }
 
     @Override
     public int hashCode() {

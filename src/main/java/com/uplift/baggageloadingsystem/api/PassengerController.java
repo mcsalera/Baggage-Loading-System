@@ -1,11 +1,13 @@
 package com.uplift.baggageloadingsystem.api;
 
+import com.uplift.baggageloadingsystem.domain.Baggage;
 import com.uplift.baggageloadingsystem.domain.Passenger;
 import com.uplift.baggageloadingsystem.forms.PassengerForm;
 import com.uplift.baggageloadingsystem.repository.PassengerRepository;
 import com.uplift.baggageloadingsystem.service.PassengerService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -33,5 +35,15 @@ public class PassengerController {
     @PutMapping
     public Passenger updatePassenger(){
         return null;
+    }
+
+    @GetMapping("/{id}/baggage")
+    public Collection<Baggage> getPassengerBaggage(@PathVariable("id") Integer id) {
+        return passengerService.getPassengerBaggage(id);
+    }
+
+    @GetMapping("/code/{code}/baggage")
+    public Collection<Baggage> getPassengerBaggage(@PathVariable("code") String code) {
+        return passengerService.getPassengerBaggage(code);
     }
 }

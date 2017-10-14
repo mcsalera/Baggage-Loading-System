@@ -12,5 +12,5 @@ import java.util.List;
  * @author Bert
  */
 public interface PassengerRepository extends JpaRepository<Passenger, Integer> {
-
+    Passenger findByCode(String code);
 }

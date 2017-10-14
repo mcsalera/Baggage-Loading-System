@@ -1,5 +1,8 @@
 package com.uplift.baggageloadingsystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.uplift.baggageloadingsystem.forms.PassengerForm;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,10 +23,13 @@ public class Passenger {
     private Double baggageWeight;
     private String code;
     private String qrCodeUrl;
+    private String contactNumber;
+    @JsonIgnore
+    @ManyToOne @JoinColumn (name = "loading_bay_id")
+    private LoadingBay loadingBay;
+    @JsonIgnore
     @OneToMany(mappedBy = "passenger", cascade={CascadeType.PERSIST, CascadeType.MERGE})
     private Collection<Baggage> baggages;
-    @ManyToOne @JoinColumn(name = "bus_id")
-    private Bus bus;
 
     public Passenger () {}
 
@@ -33,6 +39,8 @@ public class Passenger {
         this.baggageWeight = form.getBaggageWeight();
         this.fee = form.getFee();
         this.code = form.getCode();
+        this.qrCodeUrl = form.getPassengerQrCodeUrl();
+        this.contactNumber = form.getContactNumber();
     }
 
     public Integer getId() { return id; }
@@ -75,9 +83,25 @@ public class Passenger {
 
     public void setBaggages(Collection<Baggage> baggages) { this.baggages = baggages; }
 
-    public Bus getBus() { return bus; }
+    public String getContactNumber() {
+        return contactNumber;
+    }
 
-    public void setBus(Bus bus) { this.bus = bus; }
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public LoadingBay getLoadingBay() {
+        return loadingBay;
+    }
+
+    public void setLoadingBay(LoadingBay loadingBay) {
+        this.loadingBay = loadingBay;
+    }
+
+    public Integer getLoadingBayId() {
+        return this.loadingBay.getId();
+    }
 
     @Override
     public int hashCode() {
