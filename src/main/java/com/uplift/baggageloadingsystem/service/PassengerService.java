@@ -43,7 +43,8 @@ public class PassengerService {
     private String baggageQrCodePath;
     @Value("${qrcode.passenger}")
     private String passengerQrCodePath;
-
+    @Value("${qrcode.file.server}")
+    private String fileServer;
 
     PassengerService(PassengerRepository passengerRepository, BaggageRepository baggageRepository,
                      BaggageCounterRepository baggageCounterRepository, LoadingBayRepository loadingBayRepository) {
@@ -55,7 +56,7 @@ public class PassengerService {
 
     public PassengerForm createPassenger(PassengerForm form) {
         form.setFee(new BigDecimal(20.0 * form.getBaggageWeight()));
-        HashMap<String, String> passengerQrCode = generateQrCode(this.passengerQrCodePath);
+        HashMap<String, String> passengerQrCode = generateQrCode(false);
         form.setPassengerQrCodeUrl(passengerQrCode.get("url"));
         form.setCode(passengerQrCode.get("code"));
         LoadingBay loadingBay = this.loadingBayRepository.findOne(form.getLoadingBayId());
@@ -64,7 +65,7 @@ public class PassengerService {
         Passenger passenger = passengerRepository.save(passengerForm);
         form.setId(passenger.getId());
         List<Map<String, String>> qrCodes =  IntStream.range(0, form.getBaggageCount())
-                                                        .mapToObj( e -> generateQrCode(this.baggageQrCodePath))
+                                                        .mapToObj( e -> generateQrCode(true))
                                                         .collect(Collectors.toList());
         qrCodes.forEach(e -> {
             Baggage baggage = new Baggage();
@@ -77,32 +78,36 @@ public class PassengerService {
         return form;
     }
 
-    public Collection<Baggage> getPassengerBaggage(Integer id) {
-        Passenger passenger = this.passengerRepository.findOne(id);
-        return passenger.getBaggages();
-    }
-
     public Collection<Baggage> getPassengerBaggage(String code) {
         Passenger passenger = this.passengerRepository.findByCode(code);
         return passenger.getBaggages();
     }
 
-    private HashMap<String, String> generateQrCode(String savePath) {
-        String code = UUID.randomUUID().toString();
+    private HashMap<String, String> generateQrCode(boolean isBaggage) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH_mm_ss_SSS'Z'");
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String code = UUID.randomUUID().toString(),
+            savePath = isBaggage? this.baggageQrCodePath : this.passengerQrCodePath,
+            fileServer = this.fileServer + "upload/",
+            fileType = "png",
+            nowAsISO = df.format(new Date()),
+            fileName = nowAsISO + ".png",
+            filePath = savePath + "/" + fileName;
+
+        fileServer += isBaggage? "baggage/" : "passenger/";
+        fileServer += fileName;
+
         HashMap<String, String> result = new HashMap<>();
         result.put("code", code);
+        result.put("url", fileServer);
         File saveDir = new File(savePath);
+
         if(!saveDir.exists())
             saveDir.mkdirs();
-        String fileType = "png";
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH_mm_ss_SSS'Z'");
-        df.setTimeZone(tz);
-        String nowAsISO = df.format(new Date());
-        String fileName = nowAsISO + ".png";
-        String filePath = savePath + "/" + fileName;
-        int size = 250;
+
+        final int SIZE = 250;
         File myFile = new File(filePath);
+
         try {
 
             Map<EncodeHintType, Object> hintMap = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
@@ -113,8 +118,9 @@ public class PassengerService {
             hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
 
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            BitMatrix byteMatrix = qrCodeWriter.encode(code, BarcodeFormat.QR_CODE, size,
-                    size, hintMap);
+            BitMatrix byteMatrix = qrCodeWriter.encode(code, BarcodeFormat.QR_CODE, SIZE,
+                    SIZE, hintMap);
+
             int width = byteMatrix.getWidth();
             BufferedImage image = new BufferedImage(width, width,
                     BufferedImage.TYPE_INT_RGB);
@@ -138,7 +144,6 @@ public class PassengerService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        result.put("url", "http://localhost:8084/upload/" + fileName);
         return result;
     }
 }
