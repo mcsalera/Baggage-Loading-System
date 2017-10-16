@@ -1,1 +1,1 @@
-web: java -jar -Dspring.profiles.active=production target/baggage-loading-system-0.0.1-SNAPSHOT.jar
+web: java -jar --spring.profiles.active=production target/baggage-loading-system-0.0.1-SNAPSHOT.jar
