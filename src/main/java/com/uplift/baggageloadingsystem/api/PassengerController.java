@@ -37,12 +37,7 @@ public class PassengerController {
         return null;
     }
 
-    @GetMapping("/{id}/baggage")
-    public Collection<Baggage> getPassengerBaggage(@PathVariable("id") Integer id) {
-        return passengerService.getPassengerBaggage(id);
-    }
-
-    @GetMapping("/code/{code}/baggage")
+    @GetMapping("/{code}/baggage")
     public Collection<Baggage> getPassengerBaggage(@PathVariable("code") String code) {
         return passengerService.getPassengerBaggage(code);
     }
