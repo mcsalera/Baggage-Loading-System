@@ -37,6 +37,11 @@ public class PassengerController {
         return null;
     }
 
+    @GetMapping("/{code}")
+    public Passenger getPassengerByCode(@PathVariable("code") String code) {
+        return this.passengerRepository.findByCode(code);
+    }
+
     @GetMapping("/{code}/baggage")
     public Collection<Baggage> getPassengerBaggage(@PathVariable("code") String code) {
         return passengerService.getPassengerBaggage(code);
