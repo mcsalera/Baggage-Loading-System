@@ -21,4 +21,9 @@ public class LoadingBayController {
         return this.loadingBayRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public LoadingBay getLoadingBayById(@PathVariable("id") Integer id){
+        return loadingBayRepository.findOne(id);
+    }
+
 }
