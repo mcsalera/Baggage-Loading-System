@@ -33,7 +33,7 @@ public class Passenger {
 
     public Passenger () {}
 
-    public Passenger(PassengerForm form) {
+    public void setForm(PassengerForm form) {
         this.firstName = form.getFirstName();
         this.lastName = form.getLastName();
         this.baggageWeight = form.getBaggageWeight();

@@ -33,13 +33,20 @@ public class PassengerController {
     }
 
     @PutMapping
-    public Passenger updatePassenger(){
-        return null;
+    public PassengerForm updatePassenger(@RequestBody PassengerForm form){
+        return passengerService.updatePassenger(form);
     }
 
     @GetMapping("/{code}")
     public Passenger getPassengerByCode(@PathVariable("code") String code) {
         return this.passengerRepository.findByCode(code);
+    }
+
+    @PutMapping("/{code}")
+    public Passenger scanPassenger(@PathVariable("code") String code) {
+        Passenger passenger  = this.passengerRepository.findByCode(code);
+        //passenger.setStatus("BOARDED")
+        return passengerRepository.save(passenger);
     }
 
     @GetMapping("/{code}/baggage")

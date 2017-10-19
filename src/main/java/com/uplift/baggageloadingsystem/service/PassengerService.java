@@ -7,7 +7,6 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.uplift.baggageloadingsystem.domain.Baggage;
-import com.uplift.baggageloadingsystem.domain.BaggageCounter;
 import com.uplift.baggageloadingsystem.domain.LoadingBay;
 import com.uplift.baggageloadingsystem.domain.Passenger;
 import com.uplift.baggageloadingsystem.forms.PassengerForm;
@@ -60,7 +59,8 @@ public class PassengerService {
         form.setPassengerQrCodeUrl(passengerQrCode.get("url"));
         form.setCode(passengerQrCode.get("code"));
         LoadingBay loadingBay = this.loadingBayRepository.findOne(form.getLoadingBayId());
-        Passenger passengerForm = new Passenger(form);
+        Passenger passengerForm = new Passenger();
+        passengerForm.setForm(form);
         passengerForm.setLoadingBay(loadingBay);
         Passenger passenger = passengerRepository.save(passengerForm);
         form.setId(passenger.getId());
@@ -76,6 +76,19 @@ public class PassengerService {
         });
 
         return form;
+    }
+
+    public PassengerForm updatePassenger(PassengerForm passengerForm) {
+        Passenger passenger = this.passengerRepository.findOne(passengerForm.getId());
+        passengerForm.setFee(new BigDecimal(20.0 * passengerForm.getBaggageWeight()));
+        if(passengerForm.getLoadingBayId() != passenger.getLoadingBayId())
+        {
+            LoadingBay loadingBay = loadingBayRepository.findOne(passengerForm.getLoadingBayId());
+            passenger.setLoadingBay(loadingBay);
+        }
+        passenger.setForm(passengerForm);
+        passengerRepository.save(passenger);
+        return passengerForm;
     }
 
     public Collection<Baggage> getPassengerBaggage(String code) {
