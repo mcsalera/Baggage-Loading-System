@@ -14,6 +14,7 @@ import com.uplift.baggageloadingsystem.repository.BaggageCounterRepository;
 import com.uplift.baggageloadingsystem.repository.BaggageRepository;
 import com.uplift.baggageloadingsystem.repository.LoadingBayRepository;
 import com.uplift.baggageloadingsystem.repository.PassengerRepository;
+import com.uplift.baggageloadingsystem.utils.Utility;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -99,7 +100,7 @@ public class PassengerService {
     private HashMap<String, String> generateQrCode(boolean isBaggage) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH_mm_ss_SSS'Z'");
         df.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String code = UUID.randomUUID().toString(),
+        String code = Utility.generateToken(16),
             savePath = isBaggage? this.baggageQrCodePath : this.passengerQrCodePath,
             fileServer = this.fileServer + "upload/",
             fileType = "png",
