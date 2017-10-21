@@ -13,16 +13,14 @@ public class S3ClientService {
 
     private AmazonS3 amazonS3;
 
-    @Value("${aws.s3.bucket.name}")
+    @Value("${cloud.aws.s3.bucket.name}")
     private String bucketName;
-
-
 
     S3ClientService(AmazonS3 amazonS3) {
         this.amazonS3 = amazonS3;
     }
 
-    public void upload(String filename, File file) {
+    void upload(String filename, File file) {
         TransferManager transferManager = TransferManagerBuilder.standard().withS3Client(this.amazonS3).build();
         transferManager.upload(bucketName, filename, file);
     }

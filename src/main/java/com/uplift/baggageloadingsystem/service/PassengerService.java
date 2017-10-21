@@ -54,7 +54,7 @@ public class PassengerService {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    @Value("${aws.s3.bucket.name}")
+    @Value("${cloud.aws.s3.bucket.name}")
     private String bucketName;
 
 
