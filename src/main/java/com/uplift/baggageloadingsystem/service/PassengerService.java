@@ -16,6 +16,7 @@ import com.uplift.baggageloadingsystem.repository.LoadingBayRepository;
 import com.uplift.baggageloadingsystem.repository.PassengerRepository;
 import com.uplift.baggageloadingsystem.utils.Utility;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -38,20 +39,35 @@ public class PassengerService {
     private BaggageRepository baggageRepository;
     private BaggageCounterRepository baggageCounterRepository;
     private LoadingBayRepository loadingBayRepository;
+    private Environment environment;
+    private S3ClientService s3Service;
 
     @Value("${qrcode.baggage}")
     private String baggageQrCodePath;
+
     @Value("${qrcode.passenger}")
     private String passengerQrCodePath;
+
     @Value("${qrcode.file.server}")
     private String fileServer;
 
+    @Value("${cloud.aws.region.static}")
+    private String region;
+
+    @Value("${aws.s3.bucket.name}")
+    private String bucketName;
+
+
     PassengerService(PassengerRepository passengerRepository, BaggageRepository baggageRepository,
-                     BaggageCounterRepository baggageCounterRepository, LoadingBayRepository loadingBayRepository) {
+                     BaggageCounterRepository baggageCounterRepository,
+                     LoadingBayRepository loadingBayRepository, Environment environment,
+                     S3ClientService s3Service) {
         this.passengerRepository = passengerRepository;
         this.baggageRepository = baggageRepository;
         this.baggageCounterRepository = baggageCounterRepository;
         this.loadingBayRepository = loadingBayRepository;
+        this.environment = environment;
+        this.s3Service = s3Service;
     }
 
     public PassengerForm createPassenger(PassengerForm form) {
@@ -114,6 +130,7 @@ public class PassengerService {
         HashMap<String, String> result = new HashMap<>();
         result.put("code", code);
         result.put("url", fileServer);
+
         File saveDir = new File(savePath);
 
         if(!saveDir.exists())
@@ -157,6 +174,11 @@ public class PassengerService {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if(Arrays.asList(environment.getActiveProfiles()).contains("production")) {
+            s3Service.upload(fileName, myFile);
+            result.put("url", String.format("https://s3.%s.amazonaws.com/%s/%s", region, bucketName, fileName));
         }
         return result;
     }
