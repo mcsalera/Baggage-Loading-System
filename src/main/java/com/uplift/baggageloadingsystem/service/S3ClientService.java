@@ -2,7 +2,6 @@ package com.uplift.baggageloadingsystem.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +21,8 @@ public class S3ClientService {
         this.amazonS3 = amazonS3;
     }
 
-    public void upload(String filename, File file) {
-        TransferManager transferManager = TransferManagerBuilder.standard().withS3Client(this.amazonS3).build();
+    void upload(String filename, File file) {
+        TransferManager transferManager = new TransferManager(amazonS3);
         transferManager.upload(bucketName, filename, file);
     }
 }
