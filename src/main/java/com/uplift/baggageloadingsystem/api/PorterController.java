@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/porter")
+@RequestMapping("/api/porter")
 public class PorterController {
 
     private PorterRepository porterRepository;

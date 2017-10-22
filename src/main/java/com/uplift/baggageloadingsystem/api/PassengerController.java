@@ -5,13 +5,14 @@ import com.uplift.baggageloadingsystem.domain.Passenger;
 import com.uplift.baggageloadingsystem.forms.PassengerForm;
 import com.uplift.baggageloadingsystem.repository.PassengerRepository;
 import com.uplift.baggageloadingsystem.service.PassengerService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping("/passenger")
+@RequestMapping("/api/passenger")
 public class PassengerController {
 
     private PassengerRepository passengerRepository;
@@ -38,13 +39,16 @@ public class PassengerController {
     }
 
     @GetMapping("/{code}")
-    public Passenger getPassengerByCode(@PathVariable("code") String code) {
-        return this.passengerRepository.findByCode(code);
+    public Passenger getPassenger(@PathVariable("code") String code) {
+        return StringUtils.isNumeric(code)? passengerRepository.findOne(Integer.valueOf(code)) :
+                passengerRepository.findByCode(code);
+
     }
 
     @PutMapping("/{code}")
     public Passenger scanPassenger(@PathVariable("code") String code) {
-        Passenger passenger  = this.passengerRepository.findByCode(code);
+        Passenger passenger = StringUtils.isNumeric(code)? passengerRepository.findOne(Integer.valueOf(code)) :
+                passengerRepository.findByCode(code);
         //passenger.setStatus("BOARDED")
         return passengerRepository.save(passenger);
     }

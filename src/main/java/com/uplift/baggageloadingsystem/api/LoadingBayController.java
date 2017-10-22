@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/loading-bay")
+@RequestMapping(value = "/api/loading-bay")
 public class LoadingBayController {
 
     private LoadingBayRepository loadingBayRepository;

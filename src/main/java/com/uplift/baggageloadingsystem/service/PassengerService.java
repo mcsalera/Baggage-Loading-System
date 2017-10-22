@@ -15,6 +15,7 @@ import com.uplift.baggageloadingsystem.repository.BaggageRepository;
 import com.uplift.baggageloadingsystem.repository.LoadingBayRepository;
 import com.uplift.baggageloadingsystem.repository.PassengerRepository;
 import com.uplift.baggageloadingsystem.utils.Utility;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -109,7 +110,8 @@ public class PassengerService {
     }
 
     public Collection<Baggage> getPassengerBaggage(String code) {
-        Passenger passenger = this.passengerRepository.findByCode(code);
+        Passenger passenger = StringUtils.isNumeric(code)? passengerRepository.findOne(Integer.valueOf(code)) :
+                passengerRepository.findByCode(code);
         return passenger.getBaggages();
     }
 

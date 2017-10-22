@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value  = "/baggage")
+@RequestMapping(value  = "/api/baggage")
 public class BaggageController {
     private BaggageRepository baggageRepository;
 
