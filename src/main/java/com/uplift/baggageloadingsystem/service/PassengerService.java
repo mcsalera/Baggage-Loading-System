@@ -76,11 +76,9 @@ public class PassengerService {
         HashMap<String, String> passengerQrCode = generateQrCode(false);
         form.setPassengerQrCodeUrl(passengerQrCode.get("url"));
         form.setCode(passengerQrCode.get("code"));
-        LoadingBay loadingBay = this.loadingBayRepository.findOne(form.getLoadingBayId());
-        Passenger passengerForm = new Passenger();
-        passengerForm.setForm(form);
-        passengerForm.setLoadingBay(loadingBay);
-        Passenger passenger = passengerRepository.save(passengerForm);
+        LoadingBay loadingBay = loadingBayRepository.findOne(form.getLoadingBayId());
+        form.setLoadingBay(loadingBay);
+        Passenger passenger = passengerRepository.save(form.toPassenger());
         form.setId(passenger.getId());
         List<Map<String, String>> qrCodes =  IntStream.range(0, form.getBaggageCount())
                                                         .mapToObj( e -> generateQrCode(true))
@@ -90,23 +88,24 @@ public class PassengerService {
             baggage.setQrCodeUrl(e.get("url"));
             baggage.setCode(e.get("code"));
             baggage.setPassenger(passenger);
-            this.baggageRepository.save(baggage);
+            baggageRepository.save(baggage);
         });
 
         return form;
     }
 
-    public PassengerForm updatePassenger(PassengerForm passengerForm) {
-        Passenger passenger = this.passengerRepository.findOne(passengerForm.getId());
-        passengerForm.setFee(new BigDecimal(20.0 * passengerForm.getBaggageWeight()));
-        if(passengerForm.getLoadingBayId() != passenger.getLoadingBayId())
+    public PassengerForm updatePassenger(PassengerForm form) {
+        Passenger passenger = this.passengerRepository.findOne(form.getId());
+        Utility.copyProperties(form, passenger);
+        if(form.getBaggageWeight() != null)
+            passenger.setFee(new BigDecimal(20.0 * form.getBaggageWeight()));
+        if(form.getLoadingBayId() != passenger.getLoadingBayId())
         {
-            LoadingBay loadingBay = loadingBayRepository.findOne(passengerForm.getLoadingBayId());
+            LoadingBay loadingBay = loadingBayRepository.findOne(form.getLoadingBayId());
             passenger.setLoadingBay(loadingBay);
         }
-        passenger.setForm(passengerForm);
         passengerRepository.save(passenger);
-        return passengerForm;
+        return form;
     }
 
     public Collection<Baggage> getPassengerBaggage(String code) {
@@ -119,7 +118,7 @@ public class PassengerService {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH_mm_ss_SSS'Z'");
         df.setTimeZone(TimeZone.getTimeZone("UTC"));
         String code = Utility.generateToken(16),
-            savePath = isBaggage? this.baggageQrCodePath : this.passengerQrCodePath,
+            savePath = isBaggage? baggageQrCodePath : passengerQrCodePath,
             fileServer = this.fileServer + "upload/",
             fileType = "png",
             nowAsISO = df.format(new Date()),

@@ -1,99 +1,62 @@
 package com.uplift.baggageloadingsystem.forms;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.uplift.baggageloadingsystem.domain.LoadingBay;
+import com.uplift.baggageloadingsystem.domain.Passenger;
+import lombok.Data;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+@Data
 public class PassengerForm {
+
+    @NotNull(groups = Update.class)
     private Integer id;
+    @NotBlank(groups = Create.class) @NotEmpty(groups = Create.class)
     private String firstName;
+    @NotBlank(groups = Create.class) @NotEmpty(groups = Create.class)
     private String lastName;
+    @NotNull(groups = Create.class)
     private Double baggageWeight;
+    @NotNull(groups = Create.class)
     private Integer loadingBayId;
+    @NotNull(groups = Create.class)
     private Integer baggageCount;
+    @NotBlank(groups = Create.class) @NotEmpty(groups = Create.class)
     private String contactNumber;
     private BigDecimal fee;
     private String code;
     private String passengerQrCodeUrl;
+    @JsonIgnore
+    private LoadingBay loadingBay;
 
-    public Integer getId() {
-        return id;
+
+    public interface Update {
+
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public interface Create {
+
     }
 
-    public String getFirstName() {
-        return firstName;
+    @JsonIgnore
+    public Passenger toPassenger() {
+        return Passenger
+                .builder()
+                .id(id)
+                .firstName(firstName)
+                .lastName(lastName)
+                .baggageWeight(baggageWeight)
+                .contactNumber(contactNumber)
+                .fee(fee)
+                .code(code)
+                .qrCodeUrl(passengerQrCodeUrl)
+                .loadingBay(loadingBay)
+                .build();
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Double getBaggageWeight() {
-        return baggageWeight;
-    }
-
-    public void setBaggageWeight(Double baggageWeight) {
-        this.baggageWeight = baggageWeight;
-    }
-
-    public BigDecimal getFee() {
-        return fee;
-    }
-
-    public void setFee(BigDecimal fee) {
-        this.fee = fee;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getPassengerQrCodeUrl() {
-        return passengerQrCodeUrl;
-    }
-
-    public void setPassengerQrCodeUrl(String passengerQrCodeUrl) {
-        this.passengerQrCodeUrl = passengerQrCodeUrl;
-    }
-
-    public Integer getBaggageCount() {
-        return baggageCount;
-    }
-
-    public void setBaggageCount(Integer baggageCount) {
-        this.baggageCount = baggageCount;
-    }
-
-    public Integer getLoadingBayId() {
-        return loadingBayId;
-    }
-
-    public void setLoadingBayId(Integer loadingBayId) {
-        this.loadingBayId = loadingBayId;
-    }
-
-    public String getContactNumber() {
-        return contactNumber;
-    }
-
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
-    }
 }
