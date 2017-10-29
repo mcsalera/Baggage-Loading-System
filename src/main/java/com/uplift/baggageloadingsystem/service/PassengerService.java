@@ -97,9 +97,10 @@ public class PassengerService {
     public PassengerForm updatePassenger(PassengerForm form) {
         Passenger passenger = this.passengerRepository.findOne(form.getId());
         Utility.copyProperties(form, passenger);
+        System.out.println(passenger.getBaggageWeight());
         if(form.getBaggageWeight() != null)
             passenger.setFee(new BigDecimal(20.0 * form.getBaggageWeight()));
-        if(form.getLoadingBayId() != passenger.getLoadingBayId())
+        if(form.getLoadingBayId() != null && form.getLoadingBayId() != passenger.getLoadingBayId())
         {
             LoadingBay loadingBay = loadingBayRepository.findOne(form.getLoadingBayId());
             passenger.setLoadingBay(loadingBay);

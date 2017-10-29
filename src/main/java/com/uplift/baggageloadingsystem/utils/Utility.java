@@ -26,10 +26,11 @@ public final class Utility {
 
         String[] excluded =  Arrays
                                     .stream(src.getPropertyDescriptors())
-                                    .filter(e -> src.getPropertyValue(e.getName()) == null && e.getName().equals("id"))
+                                    .filter(e -> src.getPropertyValue(e.getName()) == null || e.getName().equals("id"))
                                     .map(PropertyDescriptor::getName)
                                     .toArray(String[]::new);
 
+        System.out.println(excluded.length);
         BeanUtils.copyProperties(source, target, excluded);
     }
 

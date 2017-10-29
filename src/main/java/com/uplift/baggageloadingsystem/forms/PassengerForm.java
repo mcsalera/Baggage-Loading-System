@@ -1,6 +1,7 @@
 package com.uplift.baggageloadingsystem.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.uplift.baggageloadingsystem.domain.LoadingBay;
 import com.uplift.baggageloadingsystem.domain.Passenger;
 import com.uplift.baggageloadingsystem.validators.Required;
@@ -9,6 +10,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class PassengerForm {
 
