@@ -5,13 +5,12 @@ import com.uplift.baggageloadingsystem.domain.Passenger;
 import com.uplift.baggageloadingsystem.forms.PassengerForm;
 import com.uplift.baggageloadingsystem.repository.PassengerRepository;
 import com.uplift.baggageloadingsystem.service.PassengerService;
+import com.uplift.baggageloadingsystem.validators.PassengerValidator;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Validator;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,11 +20,18 @@ public class PassengerController {
 
     private PassengerRepository passengerRepository;
     private PassengerService passengerService;
-    private Validator validator;
+    private PassengerValidator passengerValidator;
 
-    PassengerController(Validator validator, PassengerRepository passengerRepository, PassengerService passengerService) {
+    PassengerController(PassengerRepository passengerRepository, PassengerService passengerService,
+                        PassengerValidator passengerValidator) {
         this.passengerRepository = passengerRepository;
         this.passengerService = passengerService;
+        this.passengerValidator = passengerValidator;
+    }
+
+    @InitBinder("passengerForm")
+    public void setupBinder(WebDataBinder binder) {
+        binder.addValidators(passengerValidator);
     }
 
     @GetMapping
@@ -34,15 +40,12 @@ public class PassengerController {
     }
 
     @PostMapping
-    public PassengerForm createPassenger(@Validated(PassengerForm.Create.class) @RequestBody PassengerForm form){
-        SpringValidatorAdapter v = new SpringValidatorAdapter(validator);
-        BeanPropertyBindingResult errors = new BeanPropertyBindingResult(form, "order");
-//        v.validate(order, errors, FinalChecks.class);
-        return passengerService.createPassenger(form);
+    public PassengerForm createPassenger(@Validated(PassengerForm.Create.class) @RequestBody PassengerForm passengerForm){
+        return passengerService.createPassenger(passengerForm);
     }
 
     @PutMapping
-    public PassengerForm updatePassenger(@RequestBody PassengerForm form){
+    public PassengerForm updatePassenger(@Validated(PassengerForm.Update.class) @RequestBody PassengerForm form){
         return passengerService.updatePassenger(form);
     }
 

@@ -1,5 +1,6 @@
 package com.uplift.baggageloadingsystem.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -30,5 +31,9 @@ public final class Utility {
                                     .toArray(String[]::new);
 
         BeanUtils.copyProperties(source, target, excluded);
+    }
+
+    public static String formatFieldName(String str) {
+        return StringUtils.capitalize(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(str),' '));
     }
 }

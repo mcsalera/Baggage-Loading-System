@@ -1,9 +1,7 @@
 package com.uplift.baggageloadingsystem.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Singular;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,6 +9,7 @@ import java.util.Collection;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+@NoArgsConstructor @AllArgsConstructor
 @Builder
 @Data
 @Entity
@@ -31,8 +30,6 @@ public class Passenger {
     @JsonIgnore
     @OneToMany(mappedBy = "passenger", cascade={CascadeType.PERSIST, CascadeType.MERGE})
     private Collection<Baggage> baggages;
-
-    public Passenger () {}
 
     public Integer getLoadingBayId() {
         return this.loadingBay.getId();

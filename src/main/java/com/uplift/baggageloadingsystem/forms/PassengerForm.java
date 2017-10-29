@@ -3,9 +3,8 @@ package com.uplift.baggageloadingsystem.forms;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.uplift.baggageloadingsystem.domain.LoadingBay;
 import com.uplift.baggageloadingsystem.domain.Passenger;
+import com.uplift.baggageloadingsystem.validators.Required;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -15,9 +14,9 @@ public class PassengerForm {
 
     @NotNull(groups = Update.class)
     private Integer id;
-    @NotBlank(groups = Create.class) @NotEmpty(groups = Create.class)
+    @Required(groups = Create.class)
     private String firstName;
-    @NotBlank(groups = Create.class) @NotEmpty(groups = Create.class)
+    @Required(groups = Create.class)
     private String lastName;
     @NotNull(groups = Create.class)
     private Double baggageWeight;
@@ -25,7 +24,7 @@ public class PassengerForm {
     private Integer loadingBayId;
     @NotNull(groups = Create.class)
     private Integer baggageCount;
-    @NotBlank(groups = Create.class) @NotEmpty(groups = Create.class)
+    @Required(groups = Create.class)
     private String contactNumber;
     private BigDecimal fee;
     private String code;

@@ -21,6 +21,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
+import javax.transaction.Transactional;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -38,7 +39,6 @@ public class PassengerService {
 
     private PassengerRepository passengerRepository;
     private BaggageRepository baggageRepository;
-    private BaggageCounterRepository baggageCounterRepository;
     private LoadingBayRepository loadingBayRepository;
     private Environment environment;
     private S3ClientService s3Service;
@@ -60,17 +60,16 @@ public class PassengerService {
 
 
     PassengerService(PassengerRepository passengerRepository, BaggageRepository baggageRepository,
-                     BaggageCounterRepository baggageCounterRepository,
                      LoadingBayRepository loadingBayRepository, Environment environment,
                      S3ClientService s3Service) {
         this.passengerRepository = passengerRepository;
         this.baggageRepository = baggageRepository;
-        this.baggageCounterRepository = baggageCounterRepository;
         this.loadingBayRepository = loadingBayRepository;
         this.environment = environment;
         this.s3Service = s3Service;
     }
 
+    @Transactional
     public PassengerForm createPassenger(PassengerForm form) {
         form.setFee(new BigDecimal(20.0 * form.getBaggageWeight()));
         HashMap<String, String> passengerQrCode = generateQrCode(false);
@@ -94,6 +93,7 @@ public class PassengerService {
         return form;
     }
 
+    @Transactional
     public PassengerForm updatePassenger(PassengerForm form) {
         Passenger passenger = this.passengerRepository.findOne(form.getId());
         Utility.copyProperties(form, passenger);

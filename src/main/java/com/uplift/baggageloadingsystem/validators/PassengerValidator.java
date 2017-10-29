@@ -1,21 +1,37 @@
 package com.uplift.baggageloadingsystem.validators;
 
 import com.uplift.baggageloadingsystem.forms.PassengerForm;
+import com.uplift.baggageloadingsystem.repository.LoadingBayRepository;
+import com.uplift.baggageloadingsystem.repository.PassengerRepository;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import java.lang.annotation.Annotation;
 
-public class PassengerValidator implements ConstraintValidator{
+@Component
+public class PassengerValidator implements Validator{
 
+    private PassengerRepository passengerRepo;
+    private LoadingBayRepository loadingBayRepo;
 
-    @Override
-    public void initialize(Annotation annotation) {
-
+    PassengerValidator(PassengerRepository passengerRepo,
+                       LoadingBayRepository loadingBayRepo) {
+        this.passengerRepo = passengerRepo;
+        this.loadingBayRepo = loadingBayRepo;
     }
 
     @Override
-    public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
-        return false;
+    public boolean supports(Class<?> aClass) {
+        return PassengerForm.class.isAssignableFrom(aClass);
+    }
+
+    @Override
+    public void validate(Object o, Errors errors) {
+        PassengerForm form = (PassengerForm) o;
+        if(loadingBayRepo.findOne(form.getLoadingBayId()) == null)
+            errors.reject("", "Loading bay does not exists");
+
+        if(form.getId() != null && passengerRepo.findOne(form.getId()) == null)
+            errors.reject("", "Passenger does not exists");
     }
 }
