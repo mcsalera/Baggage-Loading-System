@@ -33,7 +33,7 @@ public class PassengerForm {
     private String passengerQrCodeUrl;
     @JsonIgnore
     private LoadingBay loadingBay;
-
+    private String status;
 
     public interface Update {
 
@@ -58,6 +58,4 @@ public class PassengerForm {
                 .loadingBay(loadingBay)
                 .build();
     }
-
-
 }

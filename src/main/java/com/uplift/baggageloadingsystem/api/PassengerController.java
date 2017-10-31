@@ -3,7 +3,7 @@ package com.uplift.baggageloadingsystem.api;
 import com.uplift.baggageloadingsystem.domain.Baggage;
 import com.uplift.baggageloadingsystem.domain.Passenger;
 import com.uplift.baggageloadingsystem.forms.PassengerForm;
-import com.uplift.baggageloadingsystem.repository.PassengerRepository;
+import com.uplift.baggageloadingsystem.repository.  PassengerRepository;
 import com.uplift.baggageloadingsystem.service.PassengerService;
 import com.uplift.baggageloadingsystem.validators.PassengerValidator;
 import org.apache.commons.lang3.StringUtils;
@@ -60,7 +60,7 @@ public class PassengerController {
     public Passenger scanPassenger(@PathVariable("code") String code) {
         Passenger passenger = StringUtils.isNumeric(code)? passengerRepository.findOne(Integer.valueOf(code)) :
                 passengerRepository.findByCode(code);
-        //passenger.setStatus("BOARDED")
+        passenger.setStatus("BOARDED");
         return passengerRepository.save(passenger);
     }
 

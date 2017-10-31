@@ -1,6 +1,7 @@
 package com.uplift.baggageloadingsystem.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.uplift.baggageloadingsystem.forms.PassengerForm;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class Passenger {
     private String code;
     private String qrCodeUrl;
     private String contactNumber;
+    private String status = "NOT BOARDED";
     @JsonIgnore
     @ManyToOne @JoinColumn (name = "loading_bay_id")
     private LoadingBay loadingBay;
