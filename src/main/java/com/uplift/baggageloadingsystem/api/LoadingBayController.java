@@ -1,9 +1,11 @@
 package com.uplift.baggageloadingsystem.api;
 
 import com.uplift.baggageloadingsystem.domain.LoadingBay;
+import com.uplift.baggageloadingsystem.domain.Porter;
 import com.uplift.baggageloadingsystem.repository.LoadingBayRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -17,7 +19,7 @@ public class LoadingBayController {
     }
 
     @GetMapping
-    public List<LoadingBay> getLoadingBay() {
+    public Collection<LoadingBay> getLoadingBay() {
         return this.loadingBayRepository.findAll();
     }
 
@@ -26,4 +28,8 @@ public class LoadingBayController {
         return loadingBayRepository.findOne(id);
     }
 
+    @GetMapping("/{id}/porter")
+    public Collection<Porter> getLoadingBayPorter(@PathVariable("id") Integer id){
+        return loadingBayRepository.findOne(id).getPorters();
+    }
 }

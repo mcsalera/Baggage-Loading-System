@@ -26,4 +26,7 @@ public class LoadingBay {
     @JsonIgnore
     @OneToMany (mappedBy = "loadingBay", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Collection<Passenger> passengers;
+    @JsonIgnore
+    @ManyToMany(mappedBy="loadingBays")
+    private Collection<Porter> porters;
 }

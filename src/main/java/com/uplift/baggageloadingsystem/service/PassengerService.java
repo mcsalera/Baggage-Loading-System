@@ -19,9 +19,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
-import javax.transaction.Transactional;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -71,6 +71,7 @@ public class PassengerService {
 
     @Transactional
     public PassengerForm createPassenger(PassengerForm form) {
+        form.setStatus("NOT BOARDED");
         form.setFee(new BigDecimal(20.0 * form.getBaggageWeight()));
         HashMap<String, String> passengerQrCode = generateQrCode(false);
         form.setPassengerQrCodeUrl(passengerQrCode.get("url"));
@@ -100,8 +101,7 @@ public class PassengerService {
         System.out.println(passenger.getBaggageWeight());
         if(form.getBaggageWeight() != null)
             passenger.setFee(new BigDecimal(20.0 * form.getBaggageWeight()));
-        if(form.getLoadingBayId() != null && form.getLoadingBayId() != passenger.getLoadingBayId())
-        {
+        if(form.getLoadingBayId() != null && form.getLoadingBayId() != passenger.getLoadingBayId()){
             LoadingBay loadingBay = loadingBayRepository.findOne(form.getLoadingBayId());
             passenger.setLoadingBay(loadingBay);
         }

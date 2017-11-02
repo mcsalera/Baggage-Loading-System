@@ -35,7 +35,7 @@ public class PassengerController {
     }
 
     @GetMapping
-    public List<Passenger> getPassenger(){
+    public Collection<Passenger> getPassenger(){
         return passengerRepository.findAll();
     }
 

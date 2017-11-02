@@ -24,7 +24,7 @@ public class Passenger {
     private String code;
     private String qrCodeUrl;
     private String contactNumber;
-    private String status = "NOT BOARDED";
+    private String status;
     @JsonIgnore
     @ManyToOne @JoinColumn (name = "loading_bay_id")
     private LoadingBay loadingBay;

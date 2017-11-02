@@ -1,17 +1,26 @@
 package com.uplift.baggageloadingsystem.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
+@NoArgsConstructor @AllArgsConstructor
 @Data
 @Entity
+@Builder
 public class Porter {
-    @Id
+    @Id @GeneratedValue(strategy=IDENTITY)
     private Integer id;
     private String porterNumber;
     private String firstName;
@@ -27,5 +36,4 @@ public class Porter {
     @JsonIgnore
     @OneToMany(mappedBy = "porter", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Collection<PorterLog> porterLogs;
-
 }

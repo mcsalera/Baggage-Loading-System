@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PorterRepository extends JpaRepository<Porter, Integer> {
-
+    Porter findByPorterNumber(String number);
 }

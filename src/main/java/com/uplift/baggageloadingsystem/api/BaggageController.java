@@ -4,6 +4,7 @@ import com.uplift.baggageloadingsystem.domain.Baggage;
 import com.uplift.baggageloadingsystem.repository.BaggageRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -16,7 +17,7 @@ public class BaggageController {
     }
 
     @GetMapping
-    public List<Baggage> getBaggage(){return this.baggageRepository.findAll();}
+    public Collection<Baggage> getBaggage(){return this.baggageRepository.findAll();}
 
     @PutMapping("/{code}")
     public Baggage updateBaggageStatus(@PathVariable("code") String code){

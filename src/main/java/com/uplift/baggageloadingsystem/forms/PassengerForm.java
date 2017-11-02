@@ -10,7 +10,6 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class PassengerForm {
 
@@ -26,7 +25,6 @@ public class PassengerForm {
     private Integer loadingBayId;
     @NotNull(groups = Create.class)
     private Integer baggageCount;
-    @Required(groups = Create.class)
     private String contactNumber;
     private BigDecimal fee;
     private String code;
@@ -56,6 +54,7 @@ public class PassengerForm {
                 .code(code)
                 .qrCodeUrl(passengerQrCodeUrl)
                 .loadingBay(loadingBay)
+                .status(status)
                 .build();
     }
 }
