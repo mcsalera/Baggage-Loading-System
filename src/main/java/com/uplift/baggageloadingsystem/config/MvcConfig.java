@@ -19,7 +19,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:3000", "http://jsbin.com")
+                .allowedOrigins("*")
                 .allowCredentials(false).maxAge(3600);
     }
 }
