@@ -15,13 +15,15 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.
-            httpBasic()
-        .and()
-            .cors()
-        .and()
-            .authorizeRequests()
-            .antMatchers("/api/**").permitAll();
+        http
+                .csrf()
+                .disable()
+                .httpBasic()
+                .and()
+                .cors()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/**").permitAll();
     }
 
     @Bean
@@ -37,4 +39,5 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/api/**", configuration);
         return source;
     }
+
 }
