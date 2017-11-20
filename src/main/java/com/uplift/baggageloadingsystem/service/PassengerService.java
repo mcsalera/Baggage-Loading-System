@@ -6,6 +6,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.uplift.baggageloadingsystem.api.exceptions.ResourceNotFoundException;
 import com.uplift.baggageloadingsystem.domain.Baggage;
 import com.uplift.baggageloadingsystem.domain.LoadingBay;
 import com.uplift.baggageloadingsystem.domain.Passenger;
@@ -112,6 +113,8 @@ public class PassengerService {
     public Collection<Baggage> getPassengerBaggage(String code) {
         Passenger passenger = StringUtils.isNumeric(code)? passengerRepository.findOne(Integer.valueOf(code)) :
                 passengerRepository.findByCode(code);
+        if(passenger == null)
+            throw new ResourceNotFoundException("Passenger does not exists");
         return passenger.getBaggages();
     }
 

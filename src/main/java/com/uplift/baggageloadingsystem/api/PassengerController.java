@@ -1,5 +1,6 @@
 package com.uplift.baggageloadingsystem.api;
 
+import com.uplift.baggageloadingsystem.api.exceptions.ResourceNotFoundException;
 import com.uplift.baggageloadingsystem.domain.Baggage;
 import com.uplift.baggageloadingsystem.domain.Passenger;
 import com.uplift.baggageloadingsystem.forms.PassengerForm;
@@ -51,15 +52,19 @@ public class PassengerController {
 
     @GetMapping("/{code}")
     public Passenger getPassenger(@PathVariable("code") String code) {
-        return StringUtils.isNumeric(code)? passengerRepository.findOne(Integer.valueOf(code)) :
+        Passenger passenger =  StringUtils.isNumeric(code)? passengerRepository.findOne(Integer.valueOf(code)) :
                 passengerRepository.findByCode(code);
-
+        if(passenger == null)
+            throw new ResourceNotFoundException("Passenger does not exists");
+        return passenger;
     }
 
     @PutMapping("/{code}")
     public Passenger scanPassenger(@PathVariable("code") String code) {
         Passenger passenger = StringUtils.isNumeric(code)? passengerRepository.findOne(Integer.valueOf(code)) :
                 passengerRepository.findByCode(code);
+        if(passenger == null)
+            throw new ResourceNotFoundException("Passenger does not exists");
         passenger.setStatus("BOARDED");
         return passengerRepository.save(passenger);
     }

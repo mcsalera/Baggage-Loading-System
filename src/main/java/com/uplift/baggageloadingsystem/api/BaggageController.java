@@ -1,5 +1,6 @@
 package com.uplift.baggageloadingsystem.api;
 
+import com.uplift.baggageloadingsystem.api.exceptions.ResourceNotFoundException;
 import com.uplift.baggageloadingsystem.domain.Baggage;
 import com.uplift.baggageloadingsystem.repository.BaggageRepository;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,11 @@ public class BaggageController {
 
     @PutMapping("/{code}")
     public Baggage updateBaggageStatus(@PathVariable("code") String code){
-        Baggage tempBaggage = baggageRepository.findByCode(code);
-        tempBaggage.setStatus("LOADED");
-        return this.baggageRepository.save(tempBaggage);
+        Baggage baggage = baggageRepository.findByCode(code);
+        if(baggage == null)
+            throw new ResourceNotFoundException("Baggage does not exists");
+
+        baggage.setStatus("LOADED");
+        return this.baggageRepository.save(baggage);
     }
 }

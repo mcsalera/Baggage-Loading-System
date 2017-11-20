@@ -9,15 +9,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map handle(ResourceNotFoundException exception){
+        Map<String, String> response = new HashMap<>();
+        response.put("error", exception.getMessage());
+        return response;
+    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
