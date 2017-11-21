@@ -87,6 +87,7 @@ public class PassengerService {
         qrCodes.forEach(e -> {
             Baggage baggage = new Baggage();
             baggage.setQrCodeUrl(e.get("url"));
+            form.getBaggagesQrCodeUrl().add(e.get("url"));
             baggage.setCode(e.get("code"));
             baggage.setPassenger(passenger);
             baggageRepository.save(baggage);
@@ -99,7 +100,6 @@ public class PassengerService {
     public PassengerForm updatePassenger(PassengerForm form) {
         Passenger passenger = this.passengerRepository.findOne(form.getId());
         Utility.copyProperties(form, passenger);
-        System.out.println(passenger.getBaggageWeight());
         if(form.getBaggageWeight() != null)
             passenger.setFee(new BigDecimal(20.0 * form.getBaggageWeight()));
         if(form.getLoadingBayId() != null && form.getLoadingBayId() != passenger.getLoadingBayId()){

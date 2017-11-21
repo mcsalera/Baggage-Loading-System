@@ -9,6 +9,8 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class PassengerForm {
@@ -29,6 +31,7 @@ public class PassengerForm {
     private BigDecimal fee;
     private String code;
     private String passengerQrCodeUrl;
+    private List<String> baggagesQrCodeUrl = new ArrayList<>();
     @JsonIgnore
     private LoadingBay loadingBay;
     private String status;
