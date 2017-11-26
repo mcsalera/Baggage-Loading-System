@@ -78,6 +78,9 @@ public class PassengerController {
 
     @DeleteMapping("/{id}")
     public Map deletePassenger(@PathVariable("id") Integer id) {
+        Passenger passenger = passengerRepository.findOne(id);
+        if(passenger == null)
+            throw new ResourceNotFoundException("Passenger does not exists");
         passengerRepository.delete(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", true);
