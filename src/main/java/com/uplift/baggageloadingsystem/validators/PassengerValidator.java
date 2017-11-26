@@ -37,8 +37,6 @@ public class PassengerValidator implements Validator{
             Passenger passenger= passengerRepo.findOne(form.getId());
             if(passenger == null)
                 errors.reject("", "Passenger does not exists");
-            if(form.getBaggageWeight() != null && passenger.getBaggageWeight() > form.getBaggageWeight())
-                errors.reject("", "Baggage weight should be greater than or equal to original value");
         }
 
     }
