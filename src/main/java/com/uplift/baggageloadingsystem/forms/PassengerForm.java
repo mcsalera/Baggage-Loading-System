@@ -1,7 +1,6 @@
 package com.uplift.baggageloadingsystem.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.uplift.baggageloadingsystem.domain.LoadingBay;
 import com.uplift.baggageloadingsystem.domain.Passenger;
 import com.uplift.baggageloadingsystem.validators.Required;
@@ -21,8 +20,6 @@ public class PassengerForm {
     private String firstName;
     @Required(groups = Create.class)
     private String lastName;
-    @NotNull(groups = Create.class)
-    private Double baggageWeight;
     @NotNull(groups = Create.class)
     private Integer loadingBayId;
     @NotNull(groups = Create.class)
@@ -51,7 +48,6 @@ public class PassengerForm {
                 .id(id)
                 .firstName(firstName)
                 .lastName(lastName)
-                .baggageWeight(baggageWeight)
                 .contactNumber(contactNumber)
                 .fee(fee)
                 .code(code)

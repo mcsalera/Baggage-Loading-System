@@ -73,7 +73,7 @@ public class PassengerService {
     @Transactional
     public PassengerForm createPassenger(PassengerForm form) {
         form.setStatus("NOT BOARDED");
-        form.setFee(new BigDecimal(20.0 * form.getBaggageWeight()));
+        form.setFee(new BigDecimal(25.00));
         HashMap<String, String> passengerQrCode = generateQrCode(false);
         form.setPassengerQrCodeUrl(passengerQrCode.get("url"));
         form.setCode(passengerQrCode.get("code"));
@@ -100,8 +100,6 @@ public class PassengerService {
     public PassengerForm updatePassenger(PassengerForm form) {
         Passenger passenger = this.passengerRepository.findOne(form.getId());
         Utility.copyProperties(form, passenger);
-        if(form.getBaggageWeight() != null)
-            passenger.setFee(new BigDecimal(20.0 * form.getBaggageWeight()));
         if(form.getLoadingBayId() != null && form.getLoadingBayId() != passenger.getLoadingBayId()){
             LoadingBay loadingBay = loadingBayRepository.findOne(form.getLoadingBayId());
             passenger.setLoadingBay(loadingBay);

@@ -20,7 +20,6 @@ public class Passenger {
     private String firstName;
     private String lastName;
     private BigDecimal fee;
-    private Double baggageWeight;
     private String code;
     private String qrCodeUrl;
     private String contactNumber;
@@ -30,7 +29,7 @@ public class Passenger {
     private LoadingBay loadingBay;
     @Singular
     @JsonIgnore
-    @OneToMany(mappedBy = "passenger", cascade={CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "passenger", cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Collection<Baggage> baggages;
 
     public Integer getLoadingBayId() {

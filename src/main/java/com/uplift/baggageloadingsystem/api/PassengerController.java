@@ -13,7 +13,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/passenger")
@@ -72,5 +74,13 @@ public class PassengerController {
     @GetMapping("/{code}/baggage")
     public Collection<Baggage> getPassengerBaggage(@PathVariable("code") String code) {
         return passengerService.getPassengerBaggage(code);
+    }
+
+    @DeleteMapping("/{id}")
+    public Map deletePassenger(@PathVariable("id") Integer id) {
+        passengerRepository.delete(id);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", true);
+        return response;
     }
 }
