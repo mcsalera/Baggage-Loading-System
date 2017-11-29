@@ -5,6 +5,7 @@ import com.uplift.baggageloadingsystem.domain.Baggage;
 import com.uplift.baggageloadingsystem.domain.Passenger;
 import com.uplift.baggageloadingsystem.forms.PassengerForm;
 import com.uplift.baggageloadingsystem.repository.  PassengerRepository;
+import com.uplift.baggageloadingsystem.service.MessagingService;
 import com.uplift.baggageloadingsystem.service.PassengerService;
 import com.uplift.baggageloadingsystem.validators.PassengerValidator;
 import org.apache.commons.lang3.StringUtils;

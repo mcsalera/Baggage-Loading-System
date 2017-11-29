@@ -7,6 +7,8 @@ import com.uplift.baggageloadingsystem.validators.Required;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,9 @@ public class PassengerForm {
     private Integer loadingBayId;
     @NotNull(groups = Create.class)
     private Integer baggageCount;
+    @Pattern(regexp = "[\\s]*[0-9]*[1-9]+", message="Invalid number", groups = Create.class)
+    @Size(min=11, max = 11, message="Invalid number", groups = Create.class)
+    @Required(groups = Create.class)
     private String contactNumber;
     private BigDecimal fee;
     private String code;
