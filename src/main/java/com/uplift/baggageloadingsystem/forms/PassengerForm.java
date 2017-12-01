@@ -30,7 +30,6 @@ public class PassengerForm {
     @Size(min=11, max = 11, message="Invalid number", groups = Create.class)
     @Required(groups = Create.class)
     private String contactNumber;
-    private BigDecimal fee;
     private String code;
     private String passengerQrCodeUrl;
     private List<String> baggagesQrCodeUrl = new ArrayList<>();
@@ -54,7 +53,6 @@ public class PassengerForm {
                 .firstName(firstName)
                 .lastName(lastName)
                 .contactNumber(contactNumber)
-                .fee(fee)
                 .code(code)
                 .qrCodeUrl(passengerQrCodeUrl)
                 .loadingBay(loadingBay)

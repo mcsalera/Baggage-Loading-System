@@ -73,7 +73,6 @@ public class PassengerService {
     @Transactional
     public PassengerForm createPassenger(PassengerForm form) {
         form.setStatus("NOT BOARDED");
-        form.setFee(new BigDecimal(25.00));
         HashMap<String, String> passengerQrCode = generateQrCode(false);
         form.setPassengerQrCodeUrl(passengerQrCode.get("url"));
         form.setCode(passengerQrCode.get("code"));

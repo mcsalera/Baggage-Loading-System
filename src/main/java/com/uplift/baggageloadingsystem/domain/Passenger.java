@@ -19,7 +19,6 @@ public class Passenger {
     private Integer id;
     private String firstName;
     private String lastName;
-    private BigDecimal fee;
     private String code;
     private String qrCodeUrl;
     private String contactNumber;
